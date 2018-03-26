@@ -20,13 +20,13 @@
                        <input type="hidden" name="id" value="{{ $task->id }}">
                        <table class="table table-striped table-hover">
                            <tr><td class="col-md-2">Username</td><td class="col-md-10"><b>{{ $task->user->name }}</b></td></tr>
-                                <tr><td class="col-md-2">Alphanumeric</td><td class="col-md-10"><input name="alphanumeric" type="text" value="{{ $task->alphanumeric }}" size="100"></td></tr>
+                                <tr><td class="col-md-2">Alphanumeric</td><td class="col-md-10"><input name="alphanumeric" class="form-control" type="text" value="{{ $task->alphanumeric }}" size="100"></td></tr>
                                         <tr><td>Description</td>
                                             <td>
-                                                <textarea name="description" cols="100" rows="3">{{ $task->description }}</textarea>
+                                                <textarea name="description" cols="100" rows="3" class="form-control">{{ $task->description }}</textarea>
                                             </td></tr>
                                 <tr><td>Status</td>
-                                    <td><select name="status">
+                                    <td><select name="status" class="form-control">
                                             <option value="0">w trakcie</option>
                                             <option value="1">zrealizowane</option>
                                         </select> 
