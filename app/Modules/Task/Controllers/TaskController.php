@@ -3,10 +3,16 @@
 namespace App\Modules\Task\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; 
+use App\Modules\Task\Repository\TaskRepository;
 
 class TaskController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * Display a listing of the resource.
@@ -15,9 +21,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view("Task::index");
+        // all tasks
+        $tasks = TaskRepository::indexUserTasks();
+        return view("Task::index", compact('tasks'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -25,18 +33,10 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        //generator
+        $task = TaskRepository::create();
+        return $this->index();
+        
     }
 
     /**
@@ -47,7 +47,8 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
+        $task = TaskRepository::show($id);
+        return view("Task::show", compact('task'));
     }
 
     /**
@@ -58,7 +59,8 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = TaskRepository::edit($id);
+        return view("Task::edit", compact('task'));
     }
 
     /**
@@ -68,9 +70,18 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $task = [
+            'id' => $request->get('id'),
+            'alphanumeric' => $request->get('alphanumeric'),
+            'description' => $request->get('description'),
+            'status' => $request->get('status'),
+            
+        ];
+        TaskRepository::update($task);
+        return back();
+    
     }
 
     /**
@@ -81,6 +92,7 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        TaskRepository::destroy($id);
+        return redirect()->route('task.index');
     }
 }
