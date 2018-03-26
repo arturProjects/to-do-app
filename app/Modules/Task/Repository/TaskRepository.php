@@ -81,16 +81,34 @@ class TaskRepository
     
     public static function update($task)
     {
-        Task::where('id', $task['id'])->update([
-            'alphanumeric' => $task['alphanumeric'],
-            'description' => $task['description'],
-            'status' => $task['status']
-        ]);
+        $user = Auth::user();
+        $objecttask = Task::find((int)$task['id']);
+        if ($user->can('update', $objecttask))
+        {
+            Task::where('id', $task['id'])->update([
+                'alphanumeric' => $task['alphanumeric'],
+                'description' => $task['description'],
+                'status' => $task['status']
+            ]); 
+        }
+        else
+        {
+            echo 'Not Authorized';
+        }
     } 
     
     public static function destroy($id)
     {
-        return Task::find($id)->delete();
+        $user = Auth::user();
+        $task = Task::find($id);
+        if($user->can('delete', $task))
+        {
+            Task::find($id)->delete();
+        }
+        else
+        {
+            echo 'Not Authorized';
+        }
     }
     
 }
